@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-details-service
+  namespace: default
+  labels:
+    app: customer-details-service
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: customer-details-service
+      labels:
+        app: customer-details-service
+        role: rolling-update
+    spec:
+      containers:
+        - name: customer-details-service
+          image: pradnyilk/customer-details-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: default
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: customer-details-service
