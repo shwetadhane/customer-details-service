@@ -40,7 +40,7 @@ public class CustomerDetailsController {
 
         String bankDetail = webClientBuilder.build()
                 .get()
-                .uri("http://172.22.46.146:30008")
+                .uri("http://172.22.46.146:30859/bankdetails")
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
