@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @RestController
-@EnableDiscoveryClient
 public class CustomerDetailsController {
 
     @Autowired
@@ -23,7 +22,7 @@ public class CustomerDetailsController {
 
         String bankDetail = webClientBuilder.build()
                 .get()
-                .uri("http://172.22.41.201:31229/bankdetails")
+                .uri("http://banking-details-service/bankdetails")
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
