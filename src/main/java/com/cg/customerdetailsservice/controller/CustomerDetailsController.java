@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.net.URI;
+
 @RestController
 public class CustomerDetailsController {
 
@@ -19,10 +21,12 @@ public class CustomerDetailsController {
     @RequestMapping("/details")
     public String getCustomerDetails(){
 
+        URI uri = discoveryClient.getInstances("banking-details-service").stream()
+                        .map(si->si.getUri()).findFirst().map(s->s.resolve("/bankdetails")).get();
 
         String bankDetail = webClientBuilder.build()
                 .get()
-                .uri("http://banking-details-service/bankdetails")
+                .uri(uri)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
