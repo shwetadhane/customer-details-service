@@ -38,7 +38,7 @@ pipeline {
                     sh './kubectl apply -f customer-details-service-k8s-svc.yaml'
                     sh './kubectl rollout restart deployment customer-details-service -n default'
                     // sh './kubectl get pods'
-                }
+//                }
             }
           }
     }
