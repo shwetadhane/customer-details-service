@@ -36,7 +36,7 @@ public class CustomerDetailsController {
         builder.setScheme("http");
         builder.setHost(targetHost);
         builder.setPort(targetPort);
-        builder.setPath("/check");
+        builder.setPath("/bankdetails");
         //builder.addParameter("abc", "xyz");
         String url = builder.build().toURL().toString();
         System.out.println("Raw url = " + url);
