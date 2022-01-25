@@ -25,10 +25,10 @@ public class CustomerDetailsController {
     @RequestMapping("/details")
     public String getCustomerDetails() throws URISyntaxException, MalformedURLException {
 
-        String targetHost =  discoveryClient.getInstances("demo-service").stream()
+        String targetHost =  discoveryClient.getInstances("banking-details-service").stream()
                 .map(si->si.getServiceId()).findFirst().get();
 
-        Integer targetPort =  discoveryClient.getInstances("demo-service").stream()
+        Integer targetPort =  discoveryClient.getInstances("banking-details-service").stream()
                 .map(si->si.getPort()).findFirst().get();
 
 
@@ -47,6 +47,8 @@ public class CustomerDetailsController {
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
+
+        System.out.println("Raw url = " + bankDetail);
 
         return "Shweta : "+ bankDetail + " ********Services : "+discoveryClient.getServices();
    }
