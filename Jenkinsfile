@@ -31,7 +31,7 @@ pipeline {
 //         }
         stage('Rollout Latest changes to k8s') {
             steps{
-                withKubeConfig([credentialsId: 'jenkins-robot-global']) {
+//                withKubeConfig([credentialsId: 'jenkins-robot-global']) {
                     sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
                     sh 'chmod u+x ./kubectl'
                     sh './kubectl apply -f customer-details-service-k8s-deployment.yaml'

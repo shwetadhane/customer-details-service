@@ -1,5 +1,6 @@
 package com.cg.customerdetailsservice.controller;
 
+import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -7,7 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 @RestController
 public class CustomerDetailsController {
@@ -19,40 +23,32 @@ public class CustomerDetailsController {
     DiscoveryClient discoveryClient;
 
     @RequestMapping("/details")
-    public String getCustomerDetails(){
+    public String getCustomerDetails() throws URISyntaxException, MalformedURLException {
 
-        URI uri = discoveryClient.getInstances("banking-details-service").stream()
-                        .map(si->si.getUri()).findFirst().map(s->s.resolve("/bankdetails")).get();
+        String targetHost =  discoveryClient.getInstances("demo-service").stream()
+                .map(si->si.getServiceId()).findFirst().get();
+
+        Integer targetPort =  discoveryClient.getInstances("demo-service").stream()
+                .map(si->si.getPort()).findFirst().get();
+
+
+        URIBuilder builder = new URIBuilder();
+        builder.setScheme("http");
+        builder.setHost(targetHost);
+        builder.setPort(targetPort);
+        builder.setPath("/check");
+        //builder.addParameter("abc", "xyz");
+        String url = builder.build().toURL().toString();
+        System.out.println("Raw url = " + url);
 
         String bankDetail = webClientBuilder.build()
                 .get()
-                .uri(uri)
+                .uri(url)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
 
         return "Shweta : "+ bankDetail + " ********Services : "+discoveryClient.getServices();
-    }
-
-
-    @RequestMapping("/detailsbyurl")
-    public String getCustomerDetailsByURL(){
-
-        String bankDetail = webClientBuilder.build()
-                .get()
-                .uri("http://172.22.46.146:30859/bankdetails")
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-
-        return "Shweta : "+ bankDetail + " ********Services : "+discoveryClient.getServices();
-    }
-
-
-    @RequestMapping("/detailshello")
-    public String getCustomerDetailsHello(){
-
-        return "Shweta : " + " ********Services : "+discoveryClient.getServices();
-    }
+   }
 
 }
