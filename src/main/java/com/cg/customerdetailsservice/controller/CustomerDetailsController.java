@@ -1,17 +1,16 @@
 package com.cg.customerdetailsservice.controller;
 
+import com.cg.customerdetailsservice.model.BankAccount;
+import com.cg.customerdetailsservice.model.Customer;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 @RestController
 public class CustomerDetailsController {
@@ -23,7 +22,8 @@ public class CustomerDetailsController {
     DiscoveryClient discoveryClient;
 
     @RequestMapping("/details")
-    public String getCustomerDetails() throws URISyntaxException, MalformedURLException {
+    public Customer getCustomerDetails() throws URISyntaxException, MalformedURLException {
+
 
         String targetHost =  discoveryClient.getInstances("banking-details-service").stream()
                 .map(si->si.getServiceId()).findFirst().get();
@@ -41,16 +41,16 @@ public class CustomerDetailsController {
         String url = builder.build().toURL().toString();
         System.out.println("Raw url = " + url);
 
-        String bankDetail = webClientBuilder.build()
+        BankAccount bankAccount = webClientBuilder.build()
                 .get()
                 .uri(url)
                 .retrieve()
-                .bodyToMono(String.class)
+                .bodyToMono(BankAccount.class)
                 .block();
 
-        System.out.println("Raw url = " + bankDetail);
+        Customer customer = new Customer("Shweta", "Pune", "9922911831",bankAccount.getAccountNo());
 
-        return "Shweta : "+ bankDetail + " ********Services : "+discoveryClient.getServices();
+        return  customer;
    }
 
 }
