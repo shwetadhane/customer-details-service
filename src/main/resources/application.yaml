@@ -1,19 +1,19 @@
 spring:
-  zipkin:
-    enabled: false
-    baseUrl: http://localhost:9411/
+#  zipkin:
+#    enabled: false
+#    baseUrl: http://localhost:9411/
   application:
     name: customer-details-service
-  cloud:
-    consul:
-      host: consul-consul-server
-      port: 8500
+#  cloud:
+#    consul:
+#      host: consul-consul-server
+#      port: 8500
 server:
   port: 8082
 
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
