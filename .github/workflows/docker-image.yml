@@ -68,5 +68,5 @@ jobs:
       run: |-
         kubectl apply -f customer-details-service-k8s-deployment.yaml
         kubectl apply -f customer-details-service-k8s-svc.yaml
-        kubectl rollout status deployment/$DEPLOYMENT_NAME
+        kubectl rollout restart deployment/$DEPLOYMENT_NAME
         kubectl get services -o wide
