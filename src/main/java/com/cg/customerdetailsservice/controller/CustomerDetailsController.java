@@ -48,7 +48,7 @@ public class CustomerDetailsController {
                 .bodyToMono(BankAccount.class)
                 .block();
 
-        Customer customer = new Customer("Shweta", "India", "9922911831",bankAccount.getAccountNo());
+        Customer customer = new Customer("Shweta", "UK", "9922911831",bankAccount.getAccountNo());
 
         return  customer;
    }
